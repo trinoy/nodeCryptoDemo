@@ -26,13 +26,12 @@ module.exports = function (app, model) {
     function getPublicKey(req, res) {
         var key_path = './server/keystore/key/public_key.pem';
         return g_fs.readFileAsync(key_path, "ascii")
-            .then(
-                function (content) {
-                    return res.send(content);
-                })
+            .then(function (content) {
+                return res.send(content);
+            })
             .catch(function (exception) {
                 console.log("error fetching key");
-                    res.sendStatus(400);
+                res.sendStatus(400);
             });
     }
 
@@ -78,33 +77,37 @@ module.exports = function (app, model) {
     }
 
     /*  It will do the following
-     1.  It will read the private key from the pem file
-     store in the keystore
-     2.  It will then decrypt the encrypted data sent from the client
-     using the private key
-     3.  It will then log the data[encrypted and decrypted] and the current
-     time in server log.
+     1. It will create a directory keypair/keys to store the keys
+     2. It will then generate the public and private key pair
+     3. It will then convert the generated keys into pem file
+     4. It will then store the pem file in the keystore
      */
     function generateKeyPair(pathname) {
+        var private_key_file_name = g_path.join(pathname, 'private_key.pem');
+        var public_key_file_name = g_path.join(pathname, 'public_key.pem');
+        var key_pair;
+
         return g_node_forge_rsa.generateKeyPairAsync({bits: 2048, workers: -1})
-            .then(function (key_pair) {
-                var private_pem = g_node_forge.pki.privateKeyToPem(key_pair.privateKey);
-                var public_pem = g_node_forge.pki.publicKeyToPem(key_pair.publicKey);
-                var private_key_file_name = g_path.join(pathname, 'private_key.pem');
-                var public_key_file_name = g_path.join(pathname, 'public_key.pem');
-                return g_mkdirpAsync(pathname)
-                    .then(function () {
-                        return g_promise.all([
-                            g_fs.writeFileAsync(private_key_file_name, private_pem, 'ascii'),
-                            g_fs.writeFileAsync(public_key_file_name, public_pem, 'ascii')
-                        ]);
-                    })
-                    .then(function (keys_created) {
-                        return keys_created;
-                    })
-                    .error(function (error) {
-                        return error;
-                    })
+            .then(function (key_pair_args) {
+                //private_pem = g_node_forge.pki.privateKeyToPem(key_pair.privateKey);
+                //public_pem = g_node_forge.pki.publicKeyToPem(key_pair.publicKey);
+                key_pair = key_pair_args;
+                return g_mkdirpAsync(pathname);
+            })
+            .then(function(){
+                return g_promise.all([
+                    g_node_forge.pki.privateKeyToPem(key_pair.privateKey),
+                    g_node_forge.pki.publicKeyToPem(key_pair.publicKey)
+                ]);
+            })
+            .spread(function (private_pem,public_pem) {
+                return g_promise.all([
+                    g_fs.writeFileAsync(private_key_file_name, private_pem, 'ascii'),
+                    g_fs.writeFileAsync(public_key_file_name, public_pem, 'ascii')
+                ]);
+            })
+            .then(function (keys_created) {
+                return keys_created;
             })
             .catch(function (exception) {
                 console.log("Error in generate key pair");
