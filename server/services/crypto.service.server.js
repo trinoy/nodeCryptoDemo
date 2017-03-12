@@ -24,16 +24,16 @@ module.exports = function (app, model) {
      file.
      */
     function getPublicKey(req, res) {
-        var key_path = './server/keystore/key/pubkey.pem';
+        var key_path = './server/keystore/key/public_key.pem';
         return g_fs.readFileAsync(key_path, "ascii")
             .then(
                 function (content) {
                     return res.send(content);
-                },
-                function (error) {
-                    res.sendStatus(400).send(error);
-                }
-            );
+                })
+            .catch(function (exception) {
+                console.log("error fetching key");
+                    res.sendStatus(400);
+            });
     }
 
     /*  It will do the following
@@ -48,7 +48,7 @@ module.exports = function (app, model) {
     function saveEncryptedData(req, res) {
         var encrypted_data = req.body.encypted_data;
         var content;
-        var key_path = './server/keystore/key/privkey.pem';
+        var key_path = './server/keystore/key/private_key.pem';
         return g_fs.readFileAsync(key_path, "ascii")
             .then(function (contentData) {
                 content = contentData;
@@ -86,8 +86,7 @@ module.exports = function (app, model) {
      time in server log.
      */
     function generateKeyPair(pathname) {
-        //var key_pair = g_node_forge.rsa.generateKeyPair({bits: 1024, e: 0x10001});
-        return g_node_forge_rsa.generateKeyPairAsync({bits: 1024, workers: 2, e: 0x10001})
+        return g_node_forge_rsa.generateKeyPairAsync({bits: 2048, workers: -1})
             .then(function (key_pair) {
                 var private_pem = g_node_forge.pki.privateKeyToPem(key_pair.privateKey);
                 var public_pem = g_node_forge.pki.publicKeyToPem(key_pair.publicKey);
