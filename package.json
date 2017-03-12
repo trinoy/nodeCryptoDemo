@@ -1,0 +1,29 @@
+{
+  "name": "cryptodemo",
+  "version": "1.0.0",
+  "description": "A Application to Demo Public Private key Encryption",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "crypto",
+    "public",
+    "key",
+    "private",
+    "key"
+  ],
+  "author": "Trinoy Hazarika",
+  "license": "ISC",
+  "dependencies": {
+     "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "fs": "0.0.1-security",
+    "mkdirp": "^0.5.1",
+    "node-datetime": "^1.0.0",
+    "node-forge": "^0.7.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {}
+}
