@@ -39,9 +39,9 @@ module.exports = function (app, model) {
      1.  It will read the private key pem file
      store in the keystore
      2. It will then convert the pem file to the private key
-     2.  It will then decrypt the encrypted data sent from the client
+     3.  It will then decrypt the encrypted data sent from the client
      using the private key
-     3.  It will then log the data[encrypted and decrypted] and the current
+     4.  It will then log the data[encrypted and decrypted] and the current
      time in server log.
      */
     function saveEncryptedData(req, res) {
