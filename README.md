@@ -15,3 +15,5 @@
 		* Send public key to client
 		* Get the encrypted data from client and decrypt it with the private key
 		
+3. A log folder and a keystore folder will be created during the runtime inside server folder where the logs and keys will be stored 
+		
