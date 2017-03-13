@@ -32,7 +32,7 @@
         }
 
         function login(user) {
-            vm.encrypted_data = cryptoService.encryptUserData(user.password, vm.public_key_content);
+            vm.encrypted_data = cryptoService.encryptUserData(user.username, vm.public_key_content);
             console.log(vm.encrypted_data);
 
             cryptoService.saveEncryptedData(vm.encrypted_data)

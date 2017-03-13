@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand">
-            Login
+            Crypto Test
         </a>
     </div>
 </nav>
@@ -9,14 +9,9 @@
 <div class="container-fluid container-top">
     <form>
         <div class="form-group">
-            <label for="username">Username</label>
+            <label for="username">Input</label>
             <input ng-model="model.user.username" type="text" class="form-control" id="username"
-                   placeholder="Enter your name">
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" ng-model="model.user.password" class="form-control" id="password"
-                   placeholder="Enter your password">
+                   placeholder="Enter your text">
         </div>
     </form>
     <button ng-click="model.login(model.user)" class="btn btn-primary btn-block">Login</button>
